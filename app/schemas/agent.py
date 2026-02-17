@@ -31,4 +31,4 @@ class AgentProfile(BaseModel):
         description="允许通信的 agent_id 列表",
     )
     model: LLMModel | None = Field(default=None, description="运行时使用的 LLM")
-    status: AgentStatus = Field(default=AgentStatus.TESTING, description="可用性状态")
+    status: AgentStatus = Field(default=AgentStatus.TESTING, description="可用性状态")#用于标记是否通过可用性测试，一旦通过可用性测试，就可以在后续项目中复用

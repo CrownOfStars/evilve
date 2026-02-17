@@ -205,17 +205,22 @@ class GroupChat:
             else:
                 logger.warning(f"Unknown runtime tool: {rt_id}")
 
+        # 从 SkillSchema 中提取技能名称列表，供 Agent 构建系统提示词
+        skill_names = [s.metadata.name for s in profile.skills]
+
         # 创建 Agent，注入 message_queue 引用
         new_agent = Agent(
             name=agent_id,
             system_prompt=profile.system_prompt,
             tools=agent_tools,
+            skills=skill_names,
             handoff=handsoff,
             model=model_id,
             run_config=run_config,
             message_queue=self.message_queue,
         )
         new_agent.role = profile.role
+
 
         self.participants[agent_id] = new_agent
         logger.info(f"Created agent: {agent_id} (Role: {profile.role})")
@@ -306,6 +311,8 @@ class GroupChat:
             role = Role.SYSTEM
         else:
             role = Role.USER
+
+
 
         message = Message(
             role=role,

@@ -6,7 +6,8 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import json
+from typing import TYPE_CHECKING, Any, List
 
 from agents import function_tool
 from agents.tool import Tool
@@ -34,7 +35,7 @@ def make_send_message_tool(
     allowed_targets = ", ".join(handsoff) if handsoff else "(none)"
 
     @function_tool
-    def send_message(to: str, content: str) -> str:
+    def send_message(to: str, content_lines: List[str]) -> str:
         f"""Send a message to another participant. Allowed targets: {allowed_targets}.
 
         IMPORTANT: Your direct text output will NOT be sent to anyone.
@@ -55,7 +56,9 @@ def make_send_message_tool(
         if to not in runtime.participants:
             return f"REJECTED: Participant '{to}' does not exist in this runtime."
 
-        print(f"🔧 [send_message] {sender_id} -> {to}: {content}")
+
+        content = "\n".join(content_lines)
+
         runtime.message_queue.append((sender_id, content, to))
         return f"[HANDOFF] Message delivered: {sender_id} -> {to}"
 

@@ -11,3 +11,4 @@ from app.tools import runtime_tools  # noqa: F401
 from app.tools import shell  # noqa: F401
 from app.tools import fs  # noqa: F401
 from app.tools import util  # noqa: F401
+from app.tools import python  # noqa: F401

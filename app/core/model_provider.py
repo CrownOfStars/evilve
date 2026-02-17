@@ -31,6 +31,7 @@ class CustomModelProvider(ModelProvider):
 
         settings = get_settings()
         resolved_name = model_name or settings.llm_model_name
+       
         return OpenAIChatCompletionsModel(
             model=resolved_name,
             openai_client=self._client,

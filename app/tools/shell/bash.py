@@ -49,6 +49,7 @@ def bash(
             return f'{{"error": "Blocked: commands starting with \\"{prefix.strip()}\\" are not allowed", "exit_code": -1}}'
 
     try:
+        
         result = subprocess.run(
             command,
             shell=True,
