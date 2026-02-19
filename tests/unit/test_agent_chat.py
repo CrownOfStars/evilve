@@ -27,7 +27,7 @@ from app.runtime.groupchat import GroupChat
 from app.runtime.human import HumanParticipant
 from app.runtime.system import SYSTEM_PARTICIPANT_ID, SystemParticipant
 from app.schemas.agent import AgentProfile, AgentStatus
-from app.schemas.model import LLMModel
+from app.models.llm_meta import LLMModel
 from app.schemas.tool import ToolSchema
 from app.services.agent_service import create_agent, get_agent
 from app.tools.registry import ToolRegistry

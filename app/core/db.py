@@ -1,4 +1,8 @@
-"""数据库连接与会话管理。"""
+"""数据库连接与会话管理。
+
+合并自 backend/database.py：保留 SQLite 默认配置与 get_db 依赖，
+采用异步 SQLModel 实现以符合项目规范。
+"""
 
 from __future__ import annotations
 
@@ -12,6 +16,10 @@ from app.core.config import get_settings
 import app.models  # noqa: F401
 
 
+# 兼容 backend：原 SQLALCHEMY_DATABASE_URL = "sqlite:///./gpost_agents.db"
+# 现通过 config.database_url 配置，默认 evilve.db
+
+
 def create_engine() -> AsyncEngine:
     """创建异步数据库引擎。"""
 
@@ -20,7 +28,9 @@ def create_engine() -> AsyncEngine:
 
 
 ENGINE = create_engine()
-AsyncSessionLocal = async_sessionmaker(ENGINE, expire_on_commit=False)
+AsyncSessionLocal = async_sessionmaker(
+    ENGINE, class_=AsyncSession, expire_on_commit=False
+)
 
 
 async def init_db() -> None:
@@ -35,3 +45,7 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 
     async with AsyncSessionLocal() as session:
         yield session
+
+
+# 兼容 backend/main.py 中 Depends(get_db) 的用法
+get_db = get_session

@@ -9,7 +9,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.agent import AgentRecord
 from app.schemas.agent import AgentProfile, AgentStatus
-from app.schemas.model import LLMModel
+from app.models.llm_meta import LLMModel
 from app.schemas.skill import SkillMetadata, SkillSchema
 from app.services.agent_service import create_agent, get_agent, list_agents, update_agent_status
 

@@ -31,7 +31,7 @@ from app.core.config import get_settings
 from app.runtime.groupchat import GroupChat
 from app.runtime.system import SYSTEM_PARTICIPANT_ID
 from app.schemas.agent import AgentProfile, AgentStatus
-from app.schemas.model import LLMModel
+from app.models.llm_meta import LLMModel
 from app.services.agent_service import create_agent, get_agent
 
 # 导入以触发内置工具注册

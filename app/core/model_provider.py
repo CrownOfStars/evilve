@@ -52,7 +52,7 @@ def get_run_config(model_provider: CustomModelProvider | None = None) -> RunConf
 def build_run_config_from_model(llm_model: "LLMModel") -> RunConfig:
     """根据 LLMModel 构建专属 RunConfig。"""
 
-    from app.schemas.model import LLMModel  # noqa: F811
+    from app.models.llm_meta import LLMModel  # noqa: F811
 
     settings = get_settings()
     base_url = llm_model.base_url or settings.llm_base_url

@@ -1,8 +1,16 @@
-"""工具元数据与规范定义。"""
+"""工具元数据与规范定义。
+
+含 ToolSchema（技能注册）、ToolBase/ToolCreate/Tool（编排 CRUD API）。
+docstring 与 description 语义相同，API 使用 description 以兼容后端。
+"""
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Field
+import json
+from datetime import datetime
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ToolSchema(BaseModel):
@@ -17,3 +25,52 @@ class ToolSchema(BaseModel):
     name: str = Field(description="工具名称")
     docstring: str = Field(description="工具说明文档")
     version: str | None = Field(default=None, description="工具版本")
+
+
+class ToolBase(BaseModel):
+    """Tool 基础字段（编排 API）。docstring 与 description 语义相同。"""
+
+    name: str
+    docstring: str | None = Field(
+        None,
+        description="工具说明，与 description 语义相同",
+        validation_alias="description",
+        serialization_alias="description",
+    )
+    schema: dict[str, Any] | None = None
+    credential_config: dict[str, Any] | None = None
+
+
+class ToolCreate(ToolBase):
+    """创建 Tool 请求。"""
+
+    pass
+
+
+class Tool(ToolBase):
+    """Tool 响应模型（编排 API）。"""
+
+    id: str
+    created_at: datetime
+
+    @field_validator("schema", mode="before")
+    @classmethod
+    def parse_schema(cls, v: str | dict | None) -> dict | None:
+        if isinstance(v, str) and v:
+            try:
+                return json.loads(v)
+            except (json.JSONDecodeError, TypeError):
+                return None
+        return v
+
+    @field_validator("credential_config", mode="before")
+    @classmethod
+    def parse_credential_config(cls, v: str | dict | None) -> dict | None:
+        if isinstance(v, str) and v:
+            try:
+                return json.loads(v)
+            except (json.JSONDecodeError, TypeError):
+                return None
+        return v
+
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)

@@ -22,7 +22,7 @@ from app.core.config import get_settings
 from app.runtime.groupchat import GroupChat
 from app.runtime.system import SYSTEM_PARTICIPANT_ID
 from app.schemas.agent import AgentProfile, AgentStatus
-from app.schemas.model import LLMModel
+from app.models.llm_meta import LLMModel
 from app.services.skill_service import SkillManager
 
 from agents import Agent, Runner, set_trace_processors

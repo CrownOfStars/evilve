@@ -6,7 +6,7 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
-from app.schemas.model import LLMModel
+from app.models.llm_meta import LLMModel
 from app.schemas.skill import SkillSchema
 
 

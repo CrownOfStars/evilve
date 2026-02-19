@@ -1,4 +1,4 @@
-"""LLM 模型元数据。"""
+"""LLM 模型元数据（Pydantic 元数据，非数据库表）。"""
 
 from __future__ import annotations
 
