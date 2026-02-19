@@ -37,7 +37,8 @@ class ToolBase(BaseModel):
         validation_alias="description",
         serialization_alias="description",
     )
-    schema: dict[str, Any] | None = None
+    input_schema: dict[str, Any] | None = Field(None, description="输入参数 JSON Schema")
+    output_schema: dict[str, Any] | None = Field(None, description="输出结构 JSON Schema")
     credential_config: dict[str, Any] | None = None
 
 
@@ -53,9 +54,9 @@ class Tool(ToolBase):
     id: str
     created_at: datetime
 
-    @field_validator("schema", mode="before")
+    @field_validator("input_schema", "output_schema", mode="before")
     @classmethod
-    def parse_schema(cls, v: str | dict | None) -> dict | None:
+    def parse_schema_dict(cls, v: str | dict | None) -> dict | None:
         if isinstance(v, str) and v:
             try:
                 return json.loads(v)

@@ -28,10 +28,9 @@ async def create_tool(
     session: AsyncSession = Depends(get_db),
 ) -> ToolOrchestration:
     data = tool.model_dump(by_alias=False)
-    if data.get("schema") is not None:
-        data["schema"] = json.dumps(data["schema"])
-    if data.get("credential_config") is not None:
-        data["credential_config"] = json.dumps(data["credential_config"])
+    for key in ("input_schema", "output_schema", "credential_config"):
+        if data.get(key) is not None:
+            data[key] = json.dumps(data[key])
 
     db_tool = ToolOrchestration(**data)
     session.add(db_tool)
@@ -52,15 +51,14 @@ async def update_tool(
         raise HTTPException(status_code=404, detail="Tool not found")
 
     data = tool.model_dump(by_alias=False)
-    if data.get("schema") is not None:
-        data["schema"] = json.dumps(data["schema"])
-    if data.get("credential_config") is not None:
-        data["credential_config"] = json.dumps(data["credential_config"])
+    for key in ("input_schema", "output_schema", "credential_config"):
+        if data.get(key) is not None:
+            data[key] = json.dumps(data[key])
 
     for key, value in data.items():
         setattr(db_tool, key, value)
 
-    await session.add(db_tool)
+    session.add(db_tool)
     await session.commit()
     await session.refresh(db_tool)
     return db_tool
@@ -75,6 +73,6 @@ async def delete_tool(
     db_tool = result.first()
     if not db_tool:
         raise HTTPException(status_code=404, detail="Tool not found")
-    await session.delete(db_tool)
+    session.delete(db_tool)
     await session.commit()
     return {"ok": True}

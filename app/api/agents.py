@@ -144,11 +144,11 @@ async def update_agent(
             select(GpostAgentSkillLink).where(GpostAgentSkillLink.agent_id == agent_id)
         )
         for lnk in result.all():
-            await session.delete(lnk)
+            session.delete(lnk)
         for skill_id in agent_update.skill_ids:
             session.add(GpostAgentSkillLink(agent_id=agent_id, skill_id=skill_id))
 
-    await session.add(db_agent)
+    session.add(db_agent)
     await session.commit()
     await session.refresh(db_agent)
     return await _agent_to_response(session, db_agent)
@@ -163,6 +163,6 @@ async def delete_agent(
     db_agent = result.first()
     if not db_agent:
         raise HTTPException(status_code=404, detail="Agent not found")
-    await session.delete(db_agent)
+    session.delete(db_agent)
     await session.commit()
     return {"ok": True}

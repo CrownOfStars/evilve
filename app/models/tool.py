@@ -35,6 +35,7 @@ class ToolOrchestration(SQLModel, table=True):
     id: str = Field(primary_key=True, default_factory=_uuid_str)
     name: str
     docstring: str | None = None  # 与 description 语义相同，后端 API 兼容
-    schema: str | None = None  # JSON stored as string
+    input_schema: str | None = None  # JSON stored as string
+    output_schema: str | None = None  # JSON stored as string
     credential_config: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)

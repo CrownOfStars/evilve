@@ -87,11 +87,11 @@ async def update_skill(
             select(SkillToolLink).where(SkillToolLink.skill_id == skill_id)
         )
         for lnk in result.all():
-            await session.delete(lnk)
+            session.delete(lnk)
         for tool_id in skill_update.tool_ids:
             session.add(SkillToolLink(skill_id=skill_id, tool_id=tool_id))
 
-    await session.add(db_skill)
+    session.add(db_skill)
     await session.commit()
     await session.refresh(db_skill)
     return await _skill_to_response(session, db_skill)

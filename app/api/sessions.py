@@ -100,7 +100,7 @@ async def update_session(
             else session_in.graph_config
         )
 
-    await session.add(db_session)
+    session.add(db_session)
     await session.commit()
     await session.refresh(db_session)
     return db_session
@@ -115,7 +115,7 @@ async def delete_session(
     db_session = result.first()
     if not db_session:
         raise HTTPException(status_code=404, detail="Session not found")
-    await session.delete(db_session)
+    session.delete(db_session)
     await session.commit()
     return {"ok": True}
 
@@ -184,6 +184,6 @@ async def update_session_graph(
         raise HTTPException(status_code=404, detail="Session not found")
 
     db_session.graph_config = json.dumps(graph)
-    await session.add(db_session)
+    session.add(db_session)
     await session.commit()
     return {"ok": True}

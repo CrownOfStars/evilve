@@ -70,7 +70,7 @@ async def update_provider(
     for key, value in provider.model_dump().items():
         setattr(db_provider, key, value)
 
-    await session.add(db_provider)
+    session.add(db_provider)
     await session.commit()
     await session.refresh(db_provider)
     return db_provider
@@ -85,7 +85,7 @@ async def delete_provider(
     db_provider = result.first()
     if not db_provider:
         raise HTTPException(status_code=404, detail="Provider not found")
-    await session.delete(db_provider)
+    session.delete(db_provider)
     await session.commit()
     return {"ok": True}
 
@@ -126,7 +126,7 @@ async def refresh_provider_models(
     # 删除该 provider 下现有 LLMs，插入新的
     result = await session.exec(select(GpostLLM).where(GpostLLM.provider_id == provider_id))
     for llm in result.all():
-        await session.delete(llm)
+        session.delete(llm)
 
     for item in llm_list:
         db_llm = GpostLLM(
